@@ -1,10 +1,15 @@
 import { useState } from 'react';
 //import Header from './components/Layout/Header';
-import MapPicker from './components/Map/MapPicker'; // Importe o novo componente
-import './App.css'; // Crie este arquivo se não existir
+import MapPicker from './components/Map/MapPicker';
+import './App.css';
+import Header from './components/Layout/Header';
 
 function App() {
+  const [isLoading, setIsLoading] = useState(false); // Estado para feedback de loading
+  const [weatherData, setWeatherData] = useState(null); // Estado para guardar a resposta
   const [selectedCoords, setSelectedCoords] = useState(null);
+  // 1. Estado para armazenar a data selecionada
+  const [selectedDate, setSelectedDate] = useState('');
 
   // Esta função será chamada pelo MapPicker com as coordenadas
   const handleMapSelect = (coords) => {
@@ -12,23 +17,49 @@ function App() {
     setSelectedCoords(coords);
   };
   
-  // Função de busca (a ser conectada com o SearchForm)
-  const handleSearch = async (date) => {
-    if (!selectedCoords) {
-      alert("Por favor, selecione um local no mapa.");
+  // 2. Função de busca atualizada
+  const handleSearch = async () => {
+    // Validação para garantir que ambos foram selecionados
+    if (!selectedCoords || !selectedDate) {
+      alert("Por favor, selecione um local no mapa e uma data.");
       return;
     }
-    // Aqui você chamaria sua API usando selectedCoords e a data
-    alert(`Buscando dados para Lat: ${selectedCoords.lat}, Lng: ${selectedCoords.lng} na data ${date}`);
+    setIsLoading(true);
+    setWeatherData(null);
+
+    alert(`Buscando dados para Lat: ${selectedCoords.lat}, Lng: ${selectedCoords.lng} na data ${selectedDate}`);
+    const backendUrl = new URL('http://localhost:5001/weather');
+    backendUrl.searchParams.append('lat', selectedCoords.lat);
+    backendUrl.searchParams.append('lon', selectedCoords.lng);
+    backendUrl.searchParams.append('event_date', selectedDate);
+    try {
+      const response = await fetch(backendUrl);
+      
+      if (!response.ok) {
+        throw new Error(`Erro na API: ${response.status} ${response.statusText}`);
+      }
+      
+      const data = await response.json();
+      setWeatherData(data);
+      console.log("Dados recebidos:", data);
+
+    } catch (err) {
+      console.error("Falha ao buscar dados:", err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <>
+      
+      <main className="container">
 
-      <main className="mapa">
-        {/* Você pode substituir seu SearchForm antigo ou adicionar o mapa a ele */}
+        <div className="map-picker" >
+          <MapPicker onLocationSelect={handleMapSelect} />
+        </div>
         <h2>Selecione um local no mapa:</h2>
-        <MapPicker onLocationSelect={handleMapSelect} />
+        
 
         {/* Exibe as coordenadas selecionadas para o usuário */}
         {selectedCoords && (
@@ -38,8 +69,25 @@ function App() {
           </div>
         )}
         
-        {/* Adicione o input de data e o botão de busca aqui */}
-        {/* ... */}
+        {/* 3. Adicionado container com input de data e botão de busca */}
+        <div className="search-controls">
+          <div className="date-picker-container">
+            <label htmlFor="date-picker">Selecione uma data:</label>
+            <input 
+              type="date" 
+              id="date-picker"
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
+            />
+          </div>
+          <button 
+            onClick={handleSearch}
+            // O botão fica desabilitado até que um local E uma data sejam escolhidos
+            disabled={!selectedCoords || !selectedDate} 
+          >
+            Buscar
+          </button>
+        </div>
       </main>
     </>
   );

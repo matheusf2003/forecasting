@@ -1,0 +1,6 @@
+testes
+venv*
+__pycache__
+weather_data.csv
+weather_stats.json
+graphs

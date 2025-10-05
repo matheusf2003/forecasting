@@ -1,0 +1,39 @@
+/* src/components/Layout/Header.css */
+
+.app-header {
+  display: flex; /* Usa flexbox para alinhar o logo e o texto lado a lado */
+  align-items: center; /* Alinha os itens verticalmente ao centro */
+  padding: 20px 40px; /* Espaçamento interno (20px em cima/baixo, 40px nas laterais) */
+  
+  /* Usando a variável de cor que definimos no index.css */
+  background-color: var(--primary-color, #0B3D91); 
+  color: white;
+
+  /* Uma sombra sutil para dar profundidade */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  border-bottom: 2px solid #DB5A42; /* Um pequeno detalhe com a cor do 'V' da NASA */
+}
+
+.header-logo img {
+  height: 70px; /* Define a altura do logo */
+  margin-right: 25px; /* Cria um espaço entre o logo e o texto */
+}
+
+.header-text {
+  display: flex;
+  flex-direction: column; /* Coloca o título em cima do subtítulo */
+}
+
+.header-text h1 {
+  margin: 0;
+  font-size: 2.2rem;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.header-text p {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 300;
+  opacity: 0.9; /* Deixa o subtítulo um pouco mais sutil */
+}

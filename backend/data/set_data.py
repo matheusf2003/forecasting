@@ -102,7 +102,7 @@ def prediction_data(latitude, longitude, date, days):
 
     return avg_stats, combined_df
 
-def plot_weather_data(csv_file="weather_data.csv", output_dir="graphs"):
+def plot_weather_data(csv_file, output_dir):
     # Load data
     df = pd.read_csv(csv_file, parse_dates=["date"])
     df.set_index("date", inplace=True)
@@ -142,4 +142,7 @@ if __name__ == "__main__":
     days = 90
     
     known_data(latitude, longitude, date, days)
+    plot_weather_data("weather_data.csv", "graphs")
+    
     prediction_data(latitude, longitude, date, days)
+    
