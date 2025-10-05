@@ -5,10 +5,13 @@ FROM node:latest
 WORKDIR /app
 
 # Copia arquivos de dependências primeiro (aproveita cache)
-COPY package*.json ./
+COPY app/package*.json ./
+
+# Instala dependências
+RUN npm install
 
 # Copia o restante do projeto
-COPY . .
+COPY app/ .
 
 # Expõe a porta usada pelo Vite
 EXPOSE 5173

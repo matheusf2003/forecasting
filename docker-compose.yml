@@ -22,7 +22,7 @@ services:
     ports:
       - "5173:5173"       # Mapeia a porta do Vite
     volumes:
-      - ./frontend:/app   # Monta o código para live-reload
+      - ./frontend/app:/app   # Monta o código para live-reload
       - /app/node_modules # Um truque para não sobreescrever o node_modules de dentro do container
     depends_on:
       - backend           # Inicia o frontend somente após o backend

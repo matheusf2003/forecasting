@@ -18,4 +18,4 @@ EXPOSE 5000
 
 # Comando para iniciar a aplicação quando o container for executado
 # O host 0.0.0.0 é essencial para que a aplicação seja acessível de fora do container
-CMD ["flask", "run", "--host=0.0.0.0"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5000", "--reload"]
