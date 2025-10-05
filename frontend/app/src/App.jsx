@@ -1,7 +1,8 @@
 import { useState } from 'react';
 //import Header from './components/Layout/Header';
-import MapPicker from './components/Map/MapPicker'; // Importe o novo componente
-import './App.css'; // Crie este arquivo se não existir
+import MapPicker from './components/Map/MapPicker';
+import './App.css';
+import Header from './components/Layout/Header';
 
 function App() {
   const [isLoading, setIsLoading] = useState(false); // Estado para feedback de loading
@@ -23,7 +24,6 @@ function App() {
       alert("Por favor, selecione um local no mapa e uma data.");
       return;
     }
-    // Aqui você chamaria sua API usando selectedCoords e a data
     setIsLoading(true);
     setWeatherData(null);
 
@@ -52,9 +52,14 @@ function App() {
 
   return (
     <>
+      
       <main className="container">
+
+        <div className="map-picker" >
+          <MapPicker onLocationSelect={handleMapSelect} />
+        </div>
         <h2>Selecione um local no mapa:</h2>
-        <MapPicker onLocationSelect={handleMapSelect} />
+        
 
         {/* Exibe as coordenadas selecionadas para o usuário */}
         {selectedCoords && (
