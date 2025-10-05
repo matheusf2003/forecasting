@@ -4,50 +4,30 @@ from datetime import datetime, timedelta
 import json
 
 class NASAWeatherExtractor:
-    """
-    Extract weather data from NASA POWER API for a specific location
-    """
+    #Extract weather data from NASA POWER API for a specific location
+
     
     def __init__(self, latitude, longitude):
-        """
-        Initialize extractor with coordinates
-        
-        Args:
-            latitude (float): Latitude (-90 to 90)
-            longitude (float): Longitude (-180 to 180)
-        """
+        #Initialize extractor with coordinates
+
         self.latitude = latitude
         self.longitude = longitude
         self.base_url = "https://power.larc.nasa.gov/api/temporal/daily/point"
         
-    def get_date_range(self, date):
-        """
-        Calculate date range for the past N months
-        
-        Args:
-            months_back (int): Number of months to look back
-            
-        Returns:
-            tuple: (start_date, end_date) in YYYYMMDD format
-        """
-        end_date = date + timedelta(days=15) 
+    def get_date_range(self, date, days=15):
+        #Calculate date range for the past N months
+
+        end_date = date + timedelta(days) 
         #print(f"End date set to: {end_date.strftime('%Y-%m-%d')}")
-        start_date = date - timedelta(days=15)
+        start_date = date - timedelta(days)
         #print(f"Start date set to: {start_date.strftime('%Y-%m-%d')}")
         
         return start_date.strftime("%Y%m%d"), end_date.strftime("%Y%m%d")
     
-    def fetch_weather_data(self, date):
-        """
-        Fetch weather data from NASA POWER API
-        
-        Args:
-            months_back (int): Number of months to retrieve
-            
-        Returns:
-            dict: Raw API response
-        """
-        start_date, end_date = self.get_date_range(date)
+    def fetch_weather_data(self, date, days):
+        #Fetch weather data from NASA POWER API
+
+        start_date, end_date = self.get_date_range(date,days)
         
         # Core weather variables
         weather_variables = [
@@ -86,15 +66,8 @@ class NASAWeatherExtractor:
             return None
     
     def process_to_dataframe(self, raw_data):
-        """
-        Convert raw API response to pandas DataFrame
-        
-        Args:
-            raw_data (dict): Raw API response
-            
-        Returns:
-            pd.DataFrame: Processed weather data
-        """
+        #Convert raw API response to pandas DataFrame
+
         if not raw_data or 'properties' not in raw_data:
             print("No valid data received")
             return None
@@ -135,15 +108,8 @@ class NASAWeatherExtractor:
         return df
     
     def calculate_statistics(self, df):
-        """
-        Calculate weather statistics
-        
-        Args:
-            df (pd.DataFrame): Weather data
-            
-        Returns:
-            dict: Statistical summaries
-        """
+        #Calculate weather statistics
+
         if df is None or df.empty:
             return None
         
@@ -190,48 +156,30 @@ class NASAWeatherExtractor:
         
         return stats
     
-    def export_to_csv(self, df, filename='weather_data.csv'):
-        """
-        Export data to CSV file
-        
-        Args:
-            df (pd.DataFrame): Weather data
-            filename (str): Output filename
-        """
+    def export_to_csv(self, df, filename='weather_data.csv'):   
+        #Export data to CSV file
         if df is not None:
             df.to_csv(filename)
             print(f"\nData exported to: {filename}")
     
     def export_to_json(self, stats, filename='weather_stats.json'):
-        """
-        Export statistics to JSON file
-        
-        Args:
-            stats (dict): Statistics
-            filename (str): Output filename
-        """
+        #Export statistics to JSON file
+
         if stats is not None:
             with open(filename, 'w') as f:
                 json.dump(stats, f, indent=2)
             print(f"Statistics exported to: {filename}")
     
-    def run(self, date, export_csv=True, export_json=True):
-        """
-        Run complete extraction pipeline
-        
-        Args:
-            export_csv (bool): Export raw data to CSV
-            export_json (bool): Export statistics to JSON
-            
-        Returns:
-            tuple: (DataFrame, statistics dict)
-        """
+    def run(self, date, days, export_csv=True, export_json=True):
+        #Run complete extraction pipeline
+
         print("=" * 60)
         print("NASA POWER Weather Data Extractor")
         print("=" * 60)
         
         # Fetch data
-        raw_data = self.fetch_weather_data(date)
+        raw_data = self.fetch_weather_data(date,days)
+        print(raw_data)
         if raw_data is None:
             return None, None
         
@@ -258,12 +206,8 @@ class NASAWeatherExtractor:
         return df, stats
     
     def print_summary(self, stats):
-        """
-        Print formatted statistics summary
-        
-        Args:
-            stats (dict): Statistics dictionary
-        """
+        #Print formatted statistics summary
+ 
         if stats is None:
             return
         
@@ -310,13 +254,15 @@ def main():
     # Run extraction for the past month
     date =  "2023-10-15"
     date = datetime.strptime(date, "%Y-%m-%d")
-    df, stats = extractor.run(date, export_csv=True, export_json=True)
+    days = 90
+    df, stats = extractor.run(date, days, export_csv=True, export_json=True)
     
     # Display first few rows
     if df is not None:
-        print("\nFirst 5 days of data:")
+        print("\nTable of data:")
         print(df.head())
-        
+        print("...")
+        print(df.tail())
         print("\nData shape:", df.shape)
         print("\nColumn names:", df.columns.tolist())
         
