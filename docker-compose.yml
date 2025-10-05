@@ -1,0 +1,34 @@
+version: '3.8'
+
+# Defina os serviços (containers) que compõem sua aplicação
+services:
+  # Serviço do Backend
+  backend:
+    build:
+      context: ./backend  # Onde encontrar o Dockerfile para buildar a imagem
+    ports:
+      - "5001:5000"       # Mapeia a porta 5000 do container para a 5001 da sua máquina
+    volumes:
+      - ./backend:/app    # Monta o código local no container para live-reload
+    env_file:
+      - ./backend/.env    # Carrega as variáveis de ambiente do arquivo .env
+    depends_on:
+      - cache             # Diz ao Compose para iniciar o cache antes do backend
+
+  # Serviço do Frontend
+  frontend:
+    build:
+      context: ./frontend # Onde encontrar o Dockerfile
+    ports:
+      - "5173:5173"       # Mapeia a porta do Vite
+    volumes:
+      - ./frontend:/app   # Monta o código para live-reload
+      - /app/node_modules # Um truque para não sobreescrever o node_modules de dentro do container
+    depends_on:
+      - backend           # Inicia o frontend somente após o backend
+
+  # Serviço de Cache (usando uma imagem pronta do Redis)
+  cache:
+    image: "redis:alpine" # Puxa a imagem oficial do Redis
+    ports:
+      - "6379:6379"       # Mapeia a porta padrão do Redis
