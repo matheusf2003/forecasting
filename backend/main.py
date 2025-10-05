@@ -37,12 +37,11 @@ def read_item(item_id: int, q: Union[str, None] = None):
 
 
 @app.get("/weather")
-def get_weather(lat: float, lon: float, event_date: date, days: int):
+def get_weather(lat: float, lon: float, event_date: date):
     limiar_date = date(2025, 10, 1)
-            
     if event_date > limiar_date:
-        prediction_data(lat, lon, event_date, days)
+        prediction_data(lat, lon, event_date, days = 15)
         return FileResponse("historic_weather_stats.json", media_type="application/json")
     else:
-        known_data(lat, lon, event_date, days)
+        known_data(lat, lon, event_date, days=15)
         return FileResponse("weather_stats.json", media_type="application/json")

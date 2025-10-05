@@ -10,7 +10,6 @@ function App() {
   const [selectedCoords, setSelectedCoords] = useState(null);
   // 1. Estado para armazenar a data selecionada
   const [selectedDate, setSelectedDate] = useState('');
-  const [selectedRange, setSelectedRange] = useState('');
 
   // Esta função será chamada pelo MapPicker com as coordenadas
   const handleMapSelect = (coords) => {
@@ -27,14 +26,12 @@ function App() {
     }
     setIsLoading(true);
     setWeatherData(null);
-    setSelectedRange(null);
 
     alert(`Buscando dados para Lat: ${selectedCoords.lat}, Lng: ${selectedCoords.lng} na data ${selectedDate}`);
     const backendUrl = new URL('http://localhost:5001/weather');
     backendUrl.searchParams.append('lat', selectedCoords.lat);
     backendUrl.searchParams.append('lon', selectedCoords.lng);
     backendUrl.searchParams.append('event_date', selectedDate);
-    backendUrl.searchParams.append('days', selectedRange);
     try {
       const response = await fetch(backendUrl);
       
@@ -54,17 +51,50 @@ function App() {
   };
 
   return (
-    <>
-      
+    <>     
       <main className="container-main">
-          <div class="container-map">
-            <div className="box" >
-              <MapPicker onLocationSelect={handleMapSelect} />
-            </div>
+        <div className="container-map">
+          <div className="box" >
+            <MapPicker onLocationSelect={handleMapSelect} />
+          </div>
+          <div className="box2" >
 
           </div>
-              
-        <h2>Selecione um local no mapa:</h2>
+        </div>
+        
+        <div className="row-filter-container">
+          <div className="box-filter">
+            <div class="container text-center">
+              <div class="row">
+                <div class="col">
+                  <div className="fbox" style={{ marginTop: '8px' }}>
+                    <div className="date-picker-container">
+                      <label htmlFor="date-picker" style={{ marginRight: '8px', fontSize: '20px' }}>Selecione uma data:</label>
+                      <input 
+                        type="date" 
+                        id="date-picker"
+                        value={selectedDate}
+                        onChange={(e) => setSelectedDate(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <div className="fbox">
+                    <button 
+                        onClick={handleSearch}
+                        // O botão fica desabilitado até que um local E uma data sejam escolhidos
+                        disabled={!selectedCoords || !selectedDate} 
+                        >
+                        Buscar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         
 
         {/* Exibe as coordenadas selecionadas para o usuário */}
@@ -74,26 +104,6 @@ function App() {
             <p><strong>Longitude:</strong> {selectedCoords.lng.toFixed(4)}</p>
           </div>
         )}
-        
-        {/* 3. Adicionado container com input de data e botão de busca */}
-        <div className="search-controls">
-          <div className="date-picker-container">
-            <label htmlFor="date-picker">Selecione uma data:</label>
-            <input 
-              type="date" 
-              id="date-picker"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-            />
-          </div>
-          <button 
-            onClick={handleSearch}
-            // O botão fica desabilitado até que um local E uma data sejam escolhidos
-            disabled={!selectedCoords || !selectedDate || !selectedRange} 
-          >
-            Buscar
-          </button>
-        </div>
       </main>
     </>
   );

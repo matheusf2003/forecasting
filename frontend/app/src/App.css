@@ -58,24 +58,50 @@
 
 .container-map {
   display: flex;
-  justify-content: flex-start; /* joga o conteúdo pro lado esquerdo */
+  justify-content: space-between; /* Distribui os itens com um espaço máximo entre eles */
   align-items: flex-start;
   padding-top: 40px;
   padding-left: 40px;
-  height: 100vh;             /* 100% da altura da viewport */
+  padding-right: 40px;
+  height: 710px;
   width: 100%;
+  z-index: -1;
 }
 
 .box {
   border-radius: 10px;
-  width: 45vw;
+  width: 42vw;
   overflow: hidden;
   height: 650px;
 }
 
 .box2 {
   border-radius: 10px;
-  width: 45vw;
+  width: 48vw;
   overflow: hidden;
-  height: 700px;
+  height: 650px;
+  background-color: red;
+}
+
+.row-filter-container {
+  display: flex;
+  align-items: flex-start;
+
+  width: 100%;
+}
+
+.box-filter{
+  width: 48vw;
+}
+
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 20px;
+  padding-left: 40px;
+}
+
+.fbox {
+  height: 45.2px;
 }
