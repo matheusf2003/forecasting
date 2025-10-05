@@ -2,7 +2,7 @@ import { useState } from 'react';
 //import Header from './components/Layout/Header';
 import MapPicker from './components/Map/MapPicker';
 import './App.css';
-import Header from './components/Layout/Header';
+
 
 function App() {
   const [isLoading, setIsLoading] = useState(false); // Estado para feedback de loading
@@ -56,11 +56,14 @@ function App() {
   return (
     <>
       
-      <main className="container">
+      <main className="container-main">
+          <div class="container-map">
+            <div className="box" >
+              <MapPicker onLocationSelect={handleMapSelect} />
+            </div>
 
-        <div className="map-picker" >
-          <MapPicker onLocationSelect={handleMapSelect} />
-        </div>
+          </div>
+              
         <h2>Selecione um local no mapa:</h2>
         
 

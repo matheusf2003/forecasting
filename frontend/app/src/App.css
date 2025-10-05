@@ -1,7 +1,8 @@
 #root {
-  margin: 0;
-  padding: 0;
-  text-align: center;
+  width: 100%;
+  min-height: 100vh; /* Garante que a div ocupe toda a altura da tela */
+  margin: 0; /* Remove margens extras */
+  padding: 0; /* Remove o padding extra */
 }
 
 .logo {
@@ -32,6 +33,13 @@
   }
 }
 
+.container-main{
+  width: 100%;
+  min-height: 100vh; /* Garante que a div ocupe toda a altura da tela */
+  margin: 0; /* Remove margens extras */
+  padding: 0; /* Remove o padding extra */
+}
+
 .card {
   padding: 2em;
 }
@@ -45,5 +53,29 @@
   overflow: hidden;
   width: 900px;
   height: 500px;
-  text-align: center;
+  align-items: center;
+}
+
+.container-map {
+  display: flex;
+  justify-content: flex-start; /* joga o conteúdo pro lado esquerdo */
+  align-items: flex-start;
+  padding-top: 40px;
+  padding-left: 40px;
+  height: 100vh;             /* 100% da altura da viewport */
+  width: 100%;
+}
+
+.box {
+  border-radius: 10px;
+  width: 45vw;
+  overflow: hidden;
+  height: 650px;
+}
+
+.box2 {
+  border-radius: 10px;
+  width: 45vw;
+  overflow: hidden;
+  height: 700px;
 }
