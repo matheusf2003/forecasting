@@ -20,7 +20,7 @@ class NASAWeatherExtractor:
         self.longitude = longitude
         self.base_url = "https://power.larc.nasa.gov/api/temporal/daily/point"
         
-    def get_date_range(self, date):
+    def get_date_range(self, date, days=15):
         """
         Calculate date range for the past N months
         
@@ -30,14 +30,14 @@ class NASAWeatherExtractor:
         Returns:
             tuple: (start_date, end_date) in YYYYMMDD format
         """
-        end_date = date + timedelta(days=15) 
+        end_date = date + timedelta(days) 
         #print(f"End date set to: {end_date.strftime('%Y-%m-%d')}")
-        start_date = date - timedelta(days=15)
+        start_date = date - timedelta(days)
         #print(f"Start date set to: {start_date.strftime('%Y-%m-%d')}")
         
         return start_date.strftime("%Y%m%d"), end_date.strftime("%Y%m%d")
     
-    def fetch_weather_data(self, date):
+    def fetch_weather_data(self, date, days):
         """
         Fetch weather data from NASA POWER API
         
@@ -47,7 +47,7 @@ class NASAWeatherExtractor:
         Returns:
             dict: Raw API response
         """
-        start_date, end_date = self.get_date_range(date)
+        start_date, end_date = self.get_date_range(date,days)
         
         # Core weather variables
         weather_variables = [
@@ -215,7 +215,7 @@ class NASAWeatherExtractor:
                 json.dump(stats, f, indent=2)
             print(f"Statistics exported to: {filename}")
     
-    def run(self, date, export_csv=True, export_json=True):
+    def run(self, date, days, export_csv=True, export_json=True):
         """
         Run complete extraction pipeline
         
@@ -310,13 +310,15 @@ def main():
     # Run extraction for the past month
     date =  "2023-10-15"
     date = datetime.strptime(date, "%Y-%m-%d")
-    df, stats = extractor.run(date, export_csv=True, export_json=True)
+    days = 90
+    df, stats = extractor.run(date, days, export_csv=True, export_json=True)
     
     # Display first few rows
     if df is not None:
-        print("\nFirst 5 days of data:")
+        print("\nTable of data:")
         print(df.head())
-        
+        print("...")
+        print(df.tail())
         print("\nData shape:", df.shape)
         print("\nColumn names:", df.columns.tolist())
         
