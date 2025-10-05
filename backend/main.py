@@ -3,6 +3,10 @@ import schemas
 from datetime import date
 from pydantic import BaseModel, ValidationError
 from fastapi.middleware.cors import CORSMiddleware
+from set_data import known_data, prediction_data
+
+from fastapi.responses import FileResponse
+from datetime import datetime, timedelta
 
 from fastapi import FastAPI
 
@@ -31,19 +35,14 @@ def read_root():
 def read_item(item_id: int, q: Union[str, None] = None):
     return {"item_id": item_id, "q": q}
 
+
 @app.get("/weather")
-def get_weather(lat: float, lon: float, event_date: date):
-    weather = schemas.WeatherData(
-    date=event_date,
-    temp_avg_c=20.5,
-    temp_max_c=25.0,
-    temp_min_c=15.3,
-    precipitation_mm=2.3,
-    wind_speed_ms=3.2,
-    wind_speed_max_ms=5.6,
-    humidity_pct=70,
-    specific_humidity_gkg=10.2,
-    solar_radiation_kwh_m2=1.0,
-    cloud_cover_pct=5.6
-)
-    return weather
+def get_weather(lat: float, lon: float, event_date: date, days: int):
+    limiar_date = date(2025, 10, 1)
+            
+    if event_date > limiar_date:
+        prediction_data(lat, lon, event_date, days)
+        return FileResponse("historic_weather_stats.json", media_type="application/json")
+    else:
+        known_data(lat, lon, event_date, days)
+        return FileResponse("weather_stats.json", media_type="application/json")

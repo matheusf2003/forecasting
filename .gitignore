@@ -3,4 +3,5 @@ venv*
 __pycache__
 weather_data.csv
 weather_stats.json
+historic_weather_stats.json
 graphs

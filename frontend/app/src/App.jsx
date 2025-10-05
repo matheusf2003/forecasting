@@ -10,6 +10,7 @@ function App() {
   const [selectedCoords, setSelectedCoords] = useState(null);
   // 1. Estado para armazenar a data selecionada
   const [selectedDate, setSelectedDate] = useState('');
+  const [selectedRange, setSelectedRange] = useState('');
 
   // Esta função será chamada pelo MapPicker com as coordenadas
   const handleMapSelect = (coords) => {
@@ -26,12 +27,14 @@ function App() {
     }
     setIsLoading(true);
     setWeatherData(null);
+    setSelectedRange(null);
 
     alert(`Buscando dados para Lat: ${selectedCoords.lat}, Lng: ${selectedCoords.lng} na data ${selectedDate}`);
     const backendUrl = new URL('http://localhost:5001/weather');
     backendUrl.searchParams.append('lat', selectedCoords.lat);
     backendUrl.searchParams.append('lon', selectedCoords.lng);
     backendUrl.searchParams.append('event_date', selectedDate);
+    backendUrl.searchParams.append('days', selectedRange);
     try {
       const response = await fetch(backendUrl);
       
@@ -83,7 +86,7 @@ function App() {
           <button 
             onClick={handleSearch}
             // O botão fica desabilitado até que um local E uma data sejam escolhidos
-            disabled={!selectedCoords || !selectedDate} 
+            disabled={!selectedCoords || !selectedDate || !selectedRange} 
           >
             Buscar
           </button>
