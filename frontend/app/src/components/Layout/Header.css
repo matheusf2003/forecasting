@@ -4,14 +4,15 @@
   display: flex; /* Usa flexbox para alinhar o logo e o texto lado a lado */
   align-items: center; /* Alinha os itens verticalmente ao centro */
   padding: 20px 40px; /* Espaçamento interno (20px em cima/baixo, 40px nas laterais) */
-  
+  width: 100%; /* Garantir que o header ocupe toda a largura da tela */
+  box-sizing: border-box; /* Inclui padding no cálculo de largura */
+
   /* Usando a variável de cor que definimos no index.css */
   background-color: var(--primary-color, #0B3D91); 
   color: white;
 
   /* Uma sombra sutil para dar profundidade */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  border-bottom: 2px solid #DB5A42; /* Um pequeno detalhe com a cor do 'V' da NASA */
 }
 
 .header-logo img {
@@ -36,4 +37,23 @@
   font-size: 1rem;
   font-weight: 300;
   opacity: 0.9; /* Deixa o subtítulo um pouco mais sutil */
+}
+
+/* Certifique-se que o header tem a largura total, mesmo em telas grandes */
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+/* Garantir que o html ocupa toda a largura da tela */
+html {
+  width: 100%;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh; /* Garante que a div ocupe toda a altura da tela */
+  margin: 0; /* Remove margens extras */
+  padding: 0; /* Remove o padding extra */
 }
