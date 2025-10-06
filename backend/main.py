@@ -11,8 +11,9 @@ from set_data import known_data, prediction_data, plot_weather_data
 app = FastAPI()
 
 origins = [
-    "http://172.18.0.4:5173",  # URL do frontend no container network
-    "http://localhost:5173",    # útil para desenvolvimento local
+    "http://172.18.0.3:5173",
+    "http://172.18.0.4:5173",  # substitua pela URL correta do seu frontend
+    "http://localhost:5173",   # útil para desenvolvimento local também
 ]
 
 app.add_middleware(
