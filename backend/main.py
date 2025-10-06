@@ -13,6 +13,7 @@ from fastapi import FastAPI
 app = FastAPI()
 
 origins = [
+    "http://172.18.0.3:5173",
     "http://172.18.0.4:5173",  # substitua pela URL correta do seu frontend
     "http://localhost:5173",   # útil para desenvolvimento local também
 ]

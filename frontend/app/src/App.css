@@ -76,11 +76,24 @@
 }
 
 .box2 {
+  flex: 1;
+  background-color: #fff; /* opcional, só pra diferenciar */
   border-radius: 10px;
-  width: 48vw;
-  overflow: hidden;
-  height: 650px;
-  background-color: red;
+  padding-left: 20px;
+  padding-top: 0px;
+  overflow: hidden; /* evita que o conteúdo vaze */
+  display: flex;
+  flex-direction: column;
+}
+
+#table-container {
+  flex: 1;
+  max-height: 650px; /* ou o tamanho que você quiser */
+  overflow-y: auto;  /* ativa o scroll vertical */
+  overflow-x: hidden; /* opcional, se quiser evitar barra horizontal */
+  padding-right: 8px; /* um respiro para o scroll */
+  margin-top: 10px;
+  border-radius: 10px;
 }
 
 .row-filter-container {
@@ -105,3 +118,35 @@
 .fbox {
   height: 45.2px;
 }
+
+.container-table {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  padding: 20px;
+  max-width: 800px;
+  width: 100%;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+th, td {
+  text-align: left;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #007BFF;
+  color: white;
+  text-transform: capitalize;
+}
+
+tr:hover {
+  background-color: #f1f1f1;
+}
+

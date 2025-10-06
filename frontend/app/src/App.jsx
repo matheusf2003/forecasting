@@ -42,6 +42,9 @@ function App() {
       const data = await response.json();
       setWeatherData(data);
       console.log("Dados recebidos:", data);
+      const html = await createWeatherTable(data);
+      document.getElementById('table-container').innerHTML = html;
+      
 
     } catch (err) {
       console.error("Falha ao buscar dados:", err);
@@ -49,6 +52,36 @@ function App() {
       setIsLoading(false);
     }
   };
+
+
+  async function createWeatherTable(jsonData) {
+
+      const labels = {
+          period: { name: "📅 Período", props: { start: "Data de Início", end: "Data de Fim", days: "Total de Dias" }, units: { days: " dias" } },
+          temperature: { name: "🌡️ Temperatura", props: { avg_mean: "Média", avg_max: "Máxima Média", avg_min: "Mínima Média", absolute_max: "Máxima Absoluta", absolute_min: "Mínima Absoluta", days_above_35c: "Dias acima de 35°C", days_below_0c: "Dias abaixo de 0°C" }, units: { avg_mean: "°C", avg_max: "°C", avg_min: "°C", absolute_max: "°C", absolute_min: "°C" } },
+          precipitation: { name: "💧 Precipitação", props: { total_mm: "Total", avg_daily_mm: "Média Diária", max_daily_mm: "Máxima Diária", rainy_days: "Dias com Chuva", heavy_rain_days: "Dias com Chuva Forte" }, units: { total_mm: " mm", avg_daily_mm: " mm", max_daily_mm: " mm" } },
+          wind: { name: "💨 Vento", props: { avg_speed_ms: "Velocidade Média", max_speed_ms: "Velocidade Máxima", windy_days: "Dias com Vento", very_windy_days: "Dias com Vento Muito Forte" }, units: { avg_speed_ms: " m/s", max_speed_ms: " m/s" } },
+          humidity: { name: "💦 Umidade", props: { avg_pct: "Média", max_pct: "Máxima", min_pct: "Mínima", uncomfortable_days: "Dias Desconfortáveis" }, units: { avg_pct: "%", max_pct: "%", min_pct: "%" } },
+          solar_cloud: { name: "☀️ Sol e Nuvens", props: { avg_solar_kwh_m2: "Radiação Solar Média", avg_cloud_cover_pct: "Cobertura de Nuvens Média", cloudy_days: "Dias Nublados" }, units: { avg_solar_kwh_m2: " kWh/m²", avg_cloud_cover_pct: "%" } }
+      };
+      let html = '<table class="weather-table">';
+      for (const category in jsonData) {
+          if (labels[category]) {
+              html += `<thead><tr><th colspan="2">${labels[category].name}</th></tr></thead>`;
+              html += '<tbody>';
+              for (const prop in jsonData[category]) {
+                  const label = labels[category].props[prop] || prop;
+                  const value = jsonData[category][prop];
+                  const unit = labels[category].units?.[prop] || "";
+                  html += `<tr><td>${label}</td><td>${value}${unit}</td></tr>`;
+              }
+              html += '</tbody>';
+          }
+      }
+      html += '</table>';
+      return html;
+    }
+
 
   return (
     <>     
@@ -58,15 +91,16 @@ function App() {
             <MapPicker onLocationSelect={handleMapSelect} />
           </div>
           <div className="box2" >
-
+            <div id="table-container">
+            </div>
           </div>
         </div>
         
         <div className="row-filter-container">
           <div className="box-filter">
-            <div class="container text-center">
-              <div class="row">
-                <div class="col">
+            <div className="container text-center">
+              <div className="row">
+                <div className="col">
                   <div className="fbox" style={{ marginTop: '8px' }}>
                     <div className="date-picker-container">
                       <label htmlFor="date-picker" style={{ marginRight: '8px', fontSize: '20px' }}>Selecione uma data:</label>
@@ -79,7 +113,7 @@ function App() {
                     </div>
                   </div>
                 </div>
-                <div class="col">
+                <div className="col">
                   <div className="fbox">
                     <button 
                         onClick={handleSearch}
