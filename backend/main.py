@@ -3,7 +3,7 @@ import schemas
 from datetime import date
 from pydantic import BaseModel, ValidationError
 from fastapi.middleware.cors import CORSMiddleware
-from set_data import known_data, prediction_data
+from set_data import known_data, prediction_data, plot_weather_data
 
 from fastapi.responses import FileResponse
 from datetime import datetime, timedelta
@@ -40,8 +40,12 @@ def read_item(item_id: int, q: Union[str, None] = None):
 def get_weather(lat: float, lon: float, event_date: date):
     limiar_date = date(2025, 10, 1)
     if event_date > limiar_date:
-        prediction_data(lat, lon, event_date, days = 15)
+        prediction_data(lat, lon, event_date, days=15)
+        
         return FileResponse("historic_weather_stats.json", media_type="application/json")
     else:
         known_data(lat, lon, event_date, days=15)
+        plot_weather_data("weather_data.csv", "graphs")
+        
         return FileResponse("weather_stats.json", media_type="application/json")
+
