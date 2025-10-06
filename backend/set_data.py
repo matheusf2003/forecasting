@@ -8,7 +8,8 @@ import matplotlib.pyplot as plt
 
 def known_data(latitude, longitude, date, days):
     extractor = NASAWeatherExtractor(latitude, longitude)
-    df, stats = extractor.run(date, days, export_csv=True, export_json=True)
+    df, stats = extractor.run(date, days, export_csv=True, export_json=False)
+    df, stats = extractor.run(date, 0, export_csv=False, export_json=True)
     #print(df)
     #print(stats)
     return df, stats
