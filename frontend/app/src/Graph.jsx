@@ -1,20 +1,26 @@
-import { useState } from 'react';
-// import Header from './components/Layout/Header';
-import MapPicker from './components/Map/MapPicker';
+import { useState, useEffect } from 'react';
 import './Graph.css';
 
 function Graph() {
+  const [timestamp, setTimestamp] = useState(Date.now()); // Estado para forçar recarregamento
 
-  const clouds = "http://localhost:5001/graphs/cloud_cover_pct.png";
-  const humidity = "http://localhost:5001/graphs/humidity_pct.png";
-  const precipitation = "http://localhost:5001/graphs/precipitation_mm.png";
-  const solar = "http://localhost:5001/graphs/solar_radiation_kwh_m2.png";
-  const humidity2 = "http://localhost:5001/graphs/specific_humidity_gkg.png";
-  const temp_avg = "http://localhost:5001/graphs/temp_avg_c.png";
-  const temp_max = "http://localhost:5001/graphs/temp_max_c.png";
-  const temp_min = "http://localhost:5001/graphs/temp_min_c.png";
-  const wind_max = "http://localhost:5001/graphs/wind_speed_max_ms.png";
-  const wind = "http://localhost:5001/graphs/wind_speed_ms.png";
+  useEffect(() => {
+    // Recarrega as imagens quando o componente é montado/atualizado
+    setTimestamp(Date.now());
+  }, []);
+
+  // Adicione o timestamp como query parameter nas URLs
+  const query = `?t=${timestamp}`;
+  const clouds = `http://localhost:5001/graphs/cloud_cover_pct.png${query}`;
+  const humidity = `http://localhost:5001/graphs/humidity_pct.png${query}`;
+  const precipitation = `http://localhost:5001/graphs/precipitation_mm.png${query}`;
+  const solar = `http://localhost:5001/graphs/solar_radiation_kwh_m2.png${query}`;
+  const humidity2 = `http://localhost:5001/graphs/specific_humidity_gkg.png${query}`;
+  const temp_avg = `http://localhost:5001/graphs/temp_avg_c.png${query}`;
+  const temp_max = `http://localhost:5001/graphs/temp_max_c.png${query}`;
+  const temp_min = `http://localhost:5001/graphs/temp_min_c.png${query}`;
+  const wind_max = `http://localhost:5001/graphs/wind_speed_max_ms.png${query}`;
+  const wind = `http://localhost:5001/graphs/wind_speed_ms.png${query}`;
 
   return (
     <div className="container-graphs">
