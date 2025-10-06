@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import MapPicker from './components/Map/MapPicker';
-import Graph from './Graph.jsx'; // Importa o Graph
+import Graph from './Graph.jsx';
 import './App.css';
 
 function App() {
@@ -9,9 +9,7 @@ function App() {
   const [selectedCoords, setSelectedCoords] = useState(null);
   const [selectedDate, setSelectedDate] = useState('');
 
-  // Novo estado para controlar se o Graph deve aparecer
   const [showGraph, setShowGraph] = useState(false);
-  // Novo estado para forçar atualização do Graph
   const [graphKey, setGraphKey] = useState(0);
 
   const handleMapSelect = (coords) => {
@@ -20,7 +18,7 @@ function App() {
 
   const handleSearch = async () => {
     if (!selectedCoords || !selectedDate) {
-      alert("Por favor, selecione um local no mapa e uma data.");
+      alert("Please select a location on the map and a date.");
       return;
     }
 
@@ -36,38 +34,37 @@ function App() {
       const response = await fetch(backendUrl);
 
       if (!response.ok) {
-        throw new Error(`Erro na API: ${response.status} ${response.statusText}`);
+        throw new Error(`API Error: ${response.status} ${response.statusText}`);
       }
 
       const data = await response.json();
       setWeatherData(data);
-      console.log("Dados recebidos:", data);
+      console.log("Data received:", data);
       const html = await createWeatherTable(data);
       document.getElementById('table-container').innerHTML = html;
 
-
     } catch (err) {
-      console.error("Falha ao buscar dados:", err);
+      console.error("Failed to fetch data:", err);
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Função chamada ao clicar em "Generate Graphs"
+  // Function called when clicking "Generate Graphs"
   const handleGenerateGraphs = () => {
-    setShowGraph(true); // Exibe o Graph
-    setGraphKey(prev => prev + 1); // Atualiza o Graph a cada clique
+    setShowGraph(true); // Displays the Graph
+    setGraphKey(prev => prev + 1); // Refreshes the Graph on each click
   };
 
   async function createWeatherTable(jsonData) {
 
       const labels = {
-          period: { name: "📅 Período", props: { start: "Data de Início", end: "Data de Fim", days: "Total de Dias" }, units: { days: " dias" } },
-          temperature: { name: "🌡️ Temperatura", props: { avg_mean: "Média", avg_max: "Máxima Média", avg_min: "Mínima Média", absolute_max: "Máxima Absoluta", absolute_min: "Mínima Absoluta", days_above_35c: "Dias acima de 35°C", days_below_0c: "Dias abaixo de 0°C" }, units: { avg_mean: "°C", avg_max: "°C", avg_min: "°C", absolute_max: "°C", absolute_min: "°C" } },
-          precipitation: { name: "💧 Precipitação", props: { total_mm: "Total", avg_daily_mm: "Média Diária", max_daily_mm: "Máxima Diária", rainy_days: "Dias com Chuva", heavy_rain_days: "Dias com Chuva Forte" }, units: { total_mm: " mm", avg_daily_mm: " mm", max_daily_mm: " mm" } },
-          wind: { name: "💨 Vento", props: { avg_speed_ms: "Velocidade Média", max_speed_ms: "Velocidade Máxima", windy_days: "Dias com Vento", very_windy_days: "Dias com Vento Muito Forte" }, units: { avg_speed_ms: " m/s", max_speed_ms: " m/s" } },
-          humidity: { name: "💦 Umidade", props: { avg_pct: "Média", max_pct: "Máxima", min_pct: "Mínima", uncomfortable_days: "Dias Desconfortáveis" }, units: { avg_pct: "%", max_pct: "%", min_pct: "%" } },
-          solar_cloud: { name: "☀️ Sol e Nuvens", props: { avg_solar_kwh_m2: "Radiação Solar Média", avg_cloud_cover_pct: "Cobertura de Nuvens Média", cloudy_days: "Dias Nublados" }, units: { avg_solar_kwh_m2: " kWh/m²", avg_cloud_cover_pct: "%" } }
+          period: { name: "📅 Period", props: { start: "Start Date", end: "End Date", days: "Total Days" }, units: { days: " days" } },
+          temperature: { name: "🌡️ Temperature", props: { avg_mean: "Average", avg_max: "Average Max", avg_min: "Average Min", absolute_max: "Absolute Max", absolute_min: "Absolute Min", days_above_35c: "Days above 35°C", days_below_0c: "Days below 0°C" }, units: { avg_mean: "°C", avg_max: "°C", avg_min: "°C", absolute_max: "°C", absolute_min: "°C" } },
+          precipitation: { name: "💧 Precipitation", props: { total_mm: "Total", avg_daily_mm: "Daily Average", max_daily_mm: "Daily Maximum", rainy_days: "Rainy Days", heavy_rain_days: "Heavy Rain Days" }, units: { total_mm: " mm", avg_daily_mm: " mm", max_daily_mm: " mm" } },
+          wind: { name: "💨 Wind", props: { avg_speed_ms: "Average Speed", max_speed_ms: "Maximum Speed", windy_days: "Windy Days", very_windy_days: "Very Windy Days" }, units: { avg_speed_ms: " m/s", max_speed_ms: " m/s" } },
+          humidity: { name: "💦 Humidity", props: { avg_pct: "Average", max_pct: "Maximum", min_pct: "Minimum", uncomfortable_days: "Uncomfortable Days" }, units: { avg_pct: "%", max_pct: "%", min_pct: "%" } },
+          solar_cloud: { name: "☀️ Sun and Clouds", props: { avg_solar_kwh_m2: "Average Solar Radiation", avg_cloud_cover_pct: "Average Cloud Cover", cloudy_days: "Cloudy Days" }, units: { avg_solar_kwh_m2: " kWh/m²", avg_cloud_cover_pct: "%" } }
       };
       let html = '<table class="weather-table">';
       for (const category in jsonData) {
@@ -108,7 +105,7 @@ function App() {
                 <div className="col">
                   <div className="fbox" style={{ marginTop: '8px' }}>
                     <div className="date-picker-container">
-                      <label htmlFor="date-picker" style={{ marginRight: '8px', fontSize: '20px' }}>Selecione uma data:</label>
+                      <label htmlFor="date-picker" style={{ marginRight: '8px', fontSize: '20px' }}>Select a date:</label>
                       <input
                         type="date"
                         id="date-picker"
@@ -148,7 +145,7 @@ function App() {
           </div>
         )}
 
-        {/* Renderiza o Graph somente se showGraph for true */}
+        {/* Renders the Graph only if showGraph is true */}
         {showGraph && <Graph key={graphKey} />}
       </main>
     </>
