@@ -1,106 +1,32 @@
-#root {
-  width: 100%;
-  min-height: 100vh; /* Garante que a div ocupe toda a altura da tela */
-  margin: 0; /* Remove margens extras */
-  padding: 0; /* Remove o padding extra */
-}
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.container-main{
-  width: 100%;
-  min-height: 100vh; /* Garante que a div ocupe toda a altura da tela */
-  margin: 0; /* Remove margens extras */
-  padding: 0; /* Remove o padding extra */
-}
-
-
-.read-the-docs {
-  color: #888;
-}
-
-.map-picker {
-  border-radius: 8px;
-  overflow: hidden;
-  width: 900px;
-  height: 500px;
-  align-items: center;
-}
-
-.container-map {
-  display: flex;
-  justify-content: flex-start; /* joga o conteúdo pro lado esquerdo */
-  align-items: flex-start;
-  padding-top: 40px;
-  padding-left: 40px;
-  height: 100vh;             /* 100% da altura da viewport */
-  width: 100%;
-}
-
-.box {
-  border-radius: 10px;
-  width: 45vw;
-  overflow: hidden;
-  height: 650px;
-}
-
-.box2 {
-  border-radius: 10px;
-  width: 45vw;
-  overflow: hidden;
-  height: 700px;
-}
-
-
 .container-graphs {
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 100vh;
+  align-items: flex-start; /* permite crescer com o conteúdo */
   width: 100%;
-  background-color: #2F80ED;
   padding: 40px;
+  background: linear-gradient(180deg,  #3a9bdc, #0a2a7e, #6a0dad); 
+  box-sizing: border-box;
 }
 
 .container-graphs2 {
   display: flex;
-  flex-direction: column; /* empilha verticalmente */
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: center;
-  width: 70%;              /* ocupa 70% da largura */
-  gap: 30px;               /* espaçamento entre as imagens/textos */
+  width: 50%;
+  gap: 30px;
   text-align: center;
 }
 
+.graphs-title {
+  color: white;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
 .container-graphs2 img {
-  width: 100%;             /* ocupa toda a largura do container (70% da tela) */
-  height: auto;            /* mantém proporção */
+  max-width: 100%;  /* não ultrapassa o container */
+  height: auto;     /* mantém proporção */
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
@@ -109,6 +35,3 @@
   color: white;
   font-size: 1.2rem;
 }
-
-
-

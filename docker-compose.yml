@@ -1,34 +1,39 @@
 version: '3.8'
 
-# Defina os serviços (containers) que compõem sua aplicação
 services:
   # Serviço do Backend
   backend:
     build:
-      context: ./backend  # Onde encontrar o Dockerfile para buildar a imagem
+      context: ./backend
     ports:
-      - "5001:5000"       # Mapeia a porta 5000 do container para a 5001 da sua máquina
+      - "5001:5000"
     volumes:
-      - ./backend:/app    # Monta o código local no container para live-reload
+      - ./backend:/app                # Código do backend
+      - shared_graphs:/shared_graphs  # Volume compartilhado para gráficos
     env_file:
-      - ./backend/.env    # Carrega as variáveis de ambiente do arquivo .env
+      - ./backend/.env
     depends_on:
-      - cache             # Diz ao Compose para iniciar o cache antes do backend
+      - cache
 
   # Serviço do Frontend
   frontend:
     build:
-      context: ./frontend # Onde encontrar o Dockerfile
+      context: ./frontend
     ports:
-      - "5173:5173"       # Mapeia a porta do Vite
+      - "5173:5173"
     volumes:
-      - ./frontend/app:/app   # Monta o código para live-reload
-      - /app/node_modules # Um truque para não sobreescrever o node_modules de dentro do container
+      - ./frontend/app:/app
+      - /app/node_modules
+      - shared_graphs:/shared_graphs  # Mesmo volume do backend
     depends_on:
-      - backend           # Inicia o frontend somente após o backend
+      - backend
 
-  # Serviço de Cache (usando uma imagem pronta do Redis)
+  # Serviço de Cache (Redis)
   cache:
-    image: "redis:alpine" # Puxa a imagem oficial do Redis
+    image: "redis:alpine"
     ports:
-      - "6379:6379"       # Mapeia a porta padrão do Redis
+      - "6379:6379"
+
+# Volumes compartilhados
+volumes:
+  shared_graphs:

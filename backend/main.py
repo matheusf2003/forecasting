@@ -1,29 +1,32 @@
 from typing import Union
-import schemas
 from datetime import date
-from pydantic import BaseModel, ValidationError
 from fastapi.middleware.cors import CORSMiddleware
-from set_data import known_data, prediction_data, plot_weather_data
-
 from fastapi.responses import FileResponse
-from datetime import datetime, timedelta
-
+from fastapi.staticfiles import StaticFiles
 from fastapi import FastAPI
+import os
+
+from set_data import known_data, prediction_data, plot_weather_data
 
 app = FastAPI()
 
 origins = [
-    "http://172.18.0.4:5173",  # substitua pela URL correta do seu frontend
-    "http://localhost:5173",   # útil para desenvolvimento local também
+    "http://172.18.0.4:5173",  # URL do frontend no container network
+    "http://localhost:5173",    # útil para desenvolvimento local
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,              # ou use ["*"] para permitir tudo (não recomendado em produção)
+    allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["*"],                # permite todos os métodos (GET, POST, etc)
-    allow_headers=["*"],                # permite todos os headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
+
+# Monta a pasta de gráficos como arquivos estáticos
+graphs_folder = "graphs"
+os.makedirs(graphs_folder, exist_ok=True)
+app.mount("/graphs", StaticFiles(directory=graphs_folder), name="graphs")
 
 
 @app.get("/")
@@ -39,13 +42,11 @@ def read_item(item_id: int, q: Union[str, None] = None):
 @app.get("/weather")
 def get_weather(lat: float, lon: float, event_date: date):
     limiar_date = date(2025, 10, 1)
+
     if event_date > limiar_date:
         prediction_data(lat, lon, event_date, days=15)
-        
         return FileResponse("historic_weather_stats.json", media_type="application/json")
     else:
         known_data(lat, lon, event_date, days=15)
-        plot_weather_data("weather_data.csv", "graphs")
-        
+        plot_weather_data("weather_data.csv", graphs_folder)
         return FileResponse("weather_stats.json", media_type="application/json")
-

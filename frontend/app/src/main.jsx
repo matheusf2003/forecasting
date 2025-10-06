@@ -5,6 +5,7 @@ import './index.css'
 import 'leaflet/dist/leaflet.css'
 import App from './App.jsx'
 import Header from './components/Layout/Header';
+import Graph from './Graph.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -12,3 +13,4 @@ createRoot(document.getElementById('root')).render(
     <App />
   </StrictMode>,
 )
+
