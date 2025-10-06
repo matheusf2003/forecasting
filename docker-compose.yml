@@ -12,8 +12,6 @@ services:
       - ./backend:/app    # Monta o código local no container para live-reload
     env_file:
       - ./backend/.env    # Carrega as variáveis de ambiente do arquivo .env
-    depends_on:
-      - cache             # Diz ao Compose para iniciar o cache antes do backend
 
   # Serviço do Frontend
   frontend:
@@ -26,9 +24,3 @@ services:
       - /app/node_modules # Um truque para não sobreescrever o node_modules de dentro do container
     depends_on:
       - backend           # Inicia o frontend somente após o backend
-
-  # Serviço de Cache (usando uma imagem pronta do Redis)
-  cache:
-    image: "redis:alpine" # Puxa a imagem oficial do Redis
-    ports:
-      - "6379:6379"       # Mapeia a porta padrão do Redis
